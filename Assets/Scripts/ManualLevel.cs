@@ -27,20 +27,70 @@ public class ManualLevel : MonoBehaviour
     
     void LoadLevel()
     {
-        print("Yoyo");
         for (int i = 0; i < levelMap.GetLength(0); i++)
         {
             for (int j = 0; j < levelMap.GetLength(1); j++)
             {
                 int tileIndex = levelMap[i, j];
                 if(tileIndex == 0) continue; 
-                if(tileIndex > 0 && tileIndex < spriteList.Length) 
+                if(tileIndex > 0 && tileIndex < spriteList.Length)
                 {
-                    Instantiate(spriteList[tileIndex], new Vector3(j, -i, 0), Quaternion.identity, this.transform); 
+                    Quaternion rotation = GetTileRotation(tileIndex, i, j);
+                    Instantiate(spriteList[tileIndex], new Vector3(j, -i, 0), rotation, this.transform); 
                 }
             }
         }
     }
+
+    Quaternion GetTileRotation(int tileIndex, int i, int j)
+    {
+        switch (tileIndex)
+        {
+            case 1: // Outside corner
+                if (IsTileType(i + 1, j, 2) && IsTileType(i, j + 1, 2)) return Quaternion.Euler(0, 0, 0);
+                if (IsTileType(i + 1, j, 2) && IsTileType(i, j - 1, 2)) return Quaternion.Euler(0, 0, 270);
+                if (IsTileType(i - 1, j, 2) && IsTileType(i, j + 1, 2)) return Quaternion.Euler(0, 0, 90);
+                if (IsTileType(i - 1, j, 2) && IsTileType(i, j - 1, 2)) return Quaternion.Euler(0, 0, 180);
+                break;
+            case 2: // Outside wall
+                if ((IsTileType(i, j - 1, 2) || IsTileType(i, j - 1, 1)) &&
+                    (IsTileType(i, j + 1, 2) || IsTileType(i, j + 1, 1))) return Quaternion.Euler(0, 0, 0);
+                if ((IsTileType(i - 1, j, 2) || IsTileType(i - 1, j, 1)) &&
+                    (IsTileType(i + 1, j, 2) || IsTileType(i + 1, j, 1))) return Quaternion.Euler(0, 0, 90);
+                break;
+            case 3: // Inside corner
+                if (IsTileType(i + 1, j, 4) && (IsTileType(i, j + 1, 4) || IsTileType(i, j + 1, 3))) return Quaternion.Euler(0, 0, 0);
+                if ((IsTileType(i - 1, j, 4) && (IsTileType(i, j + 1, 4) || IsTileType(i, j + 1, 3))) || 
+                    (IsTileType(i - 1, j, 3) && IsTileType(i, j + 1, 4))) return Quaternion.Euler(0, 0, 90);
+                if (IsTileType(i - 1, j, 4) && (IsTileType(i, j - 1, 4) || IsTileType(i, j - 1, 3))) return Quaternion.Euler(0, 0, 180);
+                if ((IsTileType(i + 1, j, 4) && (IsTileType(i, j - 1, 4) || IsTileType(i, j - 1, 3))) || 
+                    (IsTileType(i + 1, j, 3) && IsTileType(i, j - 1, 4))) return Quaternion.Euler(0, 0, 270);
+                break;
+            case 4: // Inside wall
+                if (IsTileType(i, j - 1, 3) || IsTileType(i, j + 1, 3) || IsTileType(i, j - 1, 4) || IsTileType(i, j + 1, 4)) 
+                    return Quaternion.Euler(0, 0, 0);
+                if (IsTileType(i - 1, j, 3) || IsTileType(i + 1, j, 3) || IsTileType(i - 1, j, 4) || IsTileType(i + 1, j, 4)) 
+                    return Quaternion.Euler(0, 0, 90);
+                break;
+
+
+            default:
+                return Quaternion.identity;
+        }
+
+        return Quaternion.identity;
+    }
+    
+    bool IsTileType(int i, int j, int type)
+    {
+        // Check if indices are within bounds of the array
+        if (i < 0 || i >= levelMap.GetLength(0) || j < 0 || j >= levelMap.GetLength(1))
+            return false;
+
+        return levelMap[i, j] == type;
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
