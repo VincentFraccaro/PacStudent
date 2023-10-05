@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class ManualLevel : MonoBehaviour
 {
-    [SerializeField] private GameObject[] spriteList;
+    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Tile[] tileList;
+    private Tile[,] gridTiles;
     
     private int[,] levelMap =
     {
@@ -33,10 +36,16 @@ public class ManualLevel : MonoBehaviour
             {
                 int tileIndex = levelMap[i, j];
                 if(tileIndex == 0) continue; 
-                if(tileIndex > 0 && tileIndex < spriteList.Length)
+                if(tileIndex > 0 && tileIndex < tileList.Length)
                 {
                     Quaternion rotation = GetTileRotation(tileIndex, i, j);
-                    Instantiate(spriteList[tileIndex], new Vector3(j, -i, 0), rotation, this.transform); 
+                    Vector3Int position = new Vector3Int(j, -i, 0);
+                    tilemap.SetTile(position, tileList[tileIndex]);
+                    Matrix4x4 matrix = tilemap.GetTransformMatrix(position);
+                    matrix *= Matrix4x4.Rotate(rotation);
+                    tilemap.SetTransformMatrix(position, matrix);
+                    tilemap.RefreshTile(position);
+                    gridTiles[i, j] = tileList[tileIndex];
                 }
             }
         }
@@ -94,6 +103,7 @@ public class ManualLevel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gridTiles = new Tile[levelMap.GetLength(0), levelMap.GetLength(1)];
         LoadLevel();
     }
 
