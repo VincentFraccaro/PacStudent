@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class ManualLevel : MonoBehaviour
 {
+    [SerializeField] private GameObject destroyMe;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tile[] tileList;
     private Tile[,] gridTiles;
@@ -34,42 +35,40 @@ public class ManualLevel : MonoBehaviour
         int mapHeight = levelMap.GetLength(0);
         int mapWidth = levelMap.GetLength(1);
         
-        LoadQuadrant(0, 0, 1, 1); // Top left
-        LoadQuadrant(0, levelMap.GetLength(1) * 2 - 1, 1, -1); // Top right
-        LoadQuadrant(levelMap.GetLength(0) * 2 - 1, 0, -1, 1); // Bottom left
-        LoadQuadrant(levelMap.GetLength(0) * 2 - 1, levelMap.GetLength(1) * 2 - 1, -1, -1); // Bottom right
+        LoadTiles();
+        Tilemap topRight = Instantiate(tilemap, tilemap.transform.parent);
+        topRight.transform.localScale = new Vector3(-1, 1, 1);
+        topRight.transform.localPosition = new Vector3(levelMap.GetLength(1)*2,0,0);
+        Tilemap bottomLeft = Instantiate(tilemap, tilemap.transform.parent);
+        bottomLeft.transform.localScale = new Vector3(1, -1, 1);
+        bottomLeft.transform.localPosition = new Vector3(0,-levelMap.GetLength(0)*2+1,0);
+        Tilemap bottomRight = Instantiate(tilemap, tilemap.transform.parent);
+        bottomRight.transform.localScale = new Vector3(-1, -1, 1);
+        bottomRight.transform.localPosition = new Vector3(levelMap.GetLength(1)*2,-levelMap.GetLength(0)*2+1,0);
         
-        
-        
+
+
+
     }
 
-    void LoadQuadrant(int baseRow, int baseCol, int rowDir, int colDir)
+    void LoadTiles()
     {
         for (int i = 0; i < levelMap.GetLength(0); i++)
         {
             for (int j = 0; j < levelMap.GetLength(1); j++)
             {
                 int tileIndex = levelMap[i, j];
-                if (tileIndex == 0) continue; 
-                if (tileIndex > 0 && tileIndex < tileList.Length)
+                if(tileIndex == 0) continue; 
+                if(tileIndex > 0 && tileIndex < tileList.Length)
                 {
                     Quaternion rotation = GetTileRotation(tileIndex, i, j);
-                
-                    Vector3Int position = new Vector3Int(baseCol + j * colDir, -(baseRow + i * rowDir), 0);
-                
+                    Vector3Int position = new Vector3Int(j, -i, 0);
                     tilemap.SetTile(position, tileList[tileIndex]);
                     Matrix4x4 matrix = tilemap.GetTransformMatrix(position);
                     matrix *= Matrix4x4.Rotate(rotation);
                     tilemap.SetTransformMatrix(position, matrix);
                     tilemap.RefreshTile(position);
-                
-                    // Store the tile in the grid
-                    int gridRow = (baseRow - 1) + i * rowDir; 
-                    int gridCol = (baseCol - 1) + j * colDir;
-                    if (gridRow >= 0 && gridRow < gridTiles.GetLength(0) && gridCol >= 0 && gridCol < gridTiles.GetLength(1))
-                    {
-                        gridTiles[gridRow, gridCol] = tileList[tileIndex];
-                    }
+                    gridTiles[i, j] = tileList[tileIndex];
                 }
             }
         }
@@ -160,6 +159,7 @@ public class ManualLevel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Destroy(destroyMe);
         gridTiles = new Tile[levelMap.GetLength(0), levelMap.GetLength(1)];
         LoadLevel();
     }
