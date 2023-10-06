@@ -235,7 +235,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Purple Ghost_0
+  m_Name: GhostAnimator_Purple
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
@@ -358,7 +358,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 3
   m_HasExitTime: 1
