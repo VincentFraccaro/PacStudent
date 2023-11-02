@@ -453,9 +453,10 @@ GameObject:
   - component: {fileID: 198594839}
   - component: {fileID: 198594838}
   - component: {fileID: 198594837}
-  - component: {fileID: 198594842}
   - component: {fileID: 198594843}
   - component: {fileID: 198594844}
+  - component: {fileID: 198594846}
+  - component: {fileID: 198594845}
   m_Layer: 0
   m_Name: PacStudent
   m_TagString: Untagged
@@ -550,7 +551,73 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &198594842
+--- !u!114 &198594843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198594836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac15e22f42323e4ebe9b643fd325540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  wallTilemaps:
+  - {fileID: 631041277}
+  - {fileID: 518366632}
+  - {fileID: 1943417427}
+  - {fileID: 979836488}
+  wallTiles:
+  - {fileID: 11400000, guid: c6fd748b9044ffc41bb83b312beb7569, type: 2}
+  - {fileID: 11400000, guid: 0e3365cff0179af46a11006125de5557, type: 2}
+  - {fileID: 11400000, guid: cfd4747b66d6e1344b07f53a3b834c0d, type: 2}
+  - {fileID: 11400000, guid: 9033e3f836698fe47b220564aae440ba, type: 2}
+  - {fileID: 11400000, guid: c88856d3c416005408fff471928ccd7b, type: 2}
+  safeTiles:
+  - {fileID: 11400000, guid: 9c909cb1f5e31274bb9b6728e942b393, type: 2}
+  - {fileID: 11400000, guid: 63c63bb2fb230364a82e20d22f8af843, type: 2}
+  - {fileID: 11400000, guid: 8a6d1cbc80c52cf4b8c8fe1cd1b7d603, type: 2}
+  chompSound: {fileID: 8300000, guid: e6588ca06377b8f42838e370a4c47bfd, type: 3}
+  movingSound: {fileID: 8300000, guid: 1a7c442d484c93a439d6890da5521238, type: 3}
+  gridCellSize: {x: 1, y: 1, z: 0}
+--- !u!70 &198594844
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198594836}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.78125, y: 0.6875}
+  m_Direction: 0
+--- !u!82 &198594845
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -560,17 +627,17 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 1a7c442d484c93a439d6890da5521238, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 0.38878322
+  MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -646,66 +713,102 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &198594843
-MonoBehaviour:
+--- !u!82 &198594846
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198594836}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eac15e22f42323e4ebe9b643fd325540, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  wallTilemap:
-  - {fileID: 631041277}
-  wallTiles:
-  - {fileID: 11400000, guid: c6fd748b9044ffc41bb83b312beb7569, type: 2}
-  - {fileID: 11400000, guid: 0e3365cff0179af46a11006125de5557, type: 2}
-  - {fileID: 11400000, guid: cfd4747b66d6e1344b07f53a3b834c0d, type: 2}
-  - {fileID: 11400000, guid: 9033e3f836698fe47b220564aae440ba, type: 2}
-  - {fileID: 11400000, guid: c88856d3c416005408fff471928ccd7b, type: 2}
-  safeTiles:
-  - {fileID: 11400000, guid: 9c909cb1f5e31274bb9b6728e942b393, type: 2}
-  - {fileID: 11400000, guid: 63c63bb2fb230364a82e20d22f8af843, type: 2}
-  gridCellSize: {x: 1, y: 1, z: 0}
---- !u!70 &198594844
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198594836}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
     serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
     serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
     serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
     serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.78125, y: 0.6875}
-  m_Direction: 0
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &209983132
 GameObject:
   m_ObjectHideFlags: 0
@@ -3510,7 +3613,6 @@ GameObject:
   - component: {fileID: 631041275}
   - component: {fileID: 631041277}
   - component: {fileID: 631041276}
-  - component: {fileID: 631041278}
   m_Layer: 0
   m_Name: Bottom left
   m_TagString: Untagged
@@ -5397,42 +5499,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!19719996 &631041278
-TilemapCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631041274}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0
-  m_UseDelaunayMesh: 0
 --- !u!1 &689435909
 GameObject:
   m_ObjectHideFlags: 0

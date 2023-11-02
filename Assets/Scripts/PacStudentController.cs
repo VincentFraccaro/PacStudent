@@ -4,24 +4,43 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PacStudentController : MonoBehaviour
-{
+{ 
+    public enum TileType
+    {
+        None,
+        Pellet,
+        Wall
+    }
+    
     public float moveSpeed = 5.0f;
     
     private Vector3 targetPosition;
     private Vector3 currentInput;  
     private Vector3 lastInput;     
     private bool isMoving = false;
-    [SerializeField] private Tilemap[] wallTilemap;
+    
+    [SerializeField] private Tilemap[] wallTilemaps;
     [SerializeField] private TileBase[] wallTiles;
     [SerializeField] private TileBase[] safeTiles;
 
-    
+    [SerializeField] private AudioClip chompSound;
+    [SerializeField] private AudioClip movingSound;
+
+    private AudioSource chompAudio;
+    private AudioSource movingAudio;
+
+    private bool isChompSoundPlaying = false;
+    private bool isMovingSoundPlaying = false;
+
+
     public Vector3 gridCellSize = new Vector3(1.0f, 1.0f, 0.0f);
 
 
     // Start is called before the first frame update
     void Start()
     {
+        chompAudio = GetComponent<AudioSource>();
+        movingAudio = GetComponent<AudioSource>();
         targetPosition = transform.position;
     }
 
@@ -29,29 +48,44 @@ public class PacStudentController : MonoBehaviour
     private void Update()
     {
         HandleInput();
-
+        
         if (!isMoving)
         {
             Vector3 nextPosition = transform.position + lastInput;
             Vector3 currentNextPosition = transform.position + currentInput;
 
-            bool canMoveLastInput = IsWalkable(nextPosition);
-            bool canMoveCurrentInput = IsWalkable(currentNextPosition);
+            TileType nextTileType = IsWalkable(nextPosition);
+            TileType currentNextTileType = IsWalkable(currentNextPosition);
 
-            if (canMoveLastInput || canMoveCurrentInput)
+            if (nextTileType == TileType.Pellet || nextTileType == TileType.None)
             {
-                if (canMoveLastInput)
-                {
-                    currentInput = lastInput;
-                    targetPosition = GetCenterOfGridCell(nextPosition);
-                }
-                else
-                {
-                    targetPosition = GetCenterOfGridCell(currentNextPosition);
-                }
-
+                currentInput = lastInput;
+                targetPosition = GetCenterOfGridCell(nextPosition);
                 isMoving = true;
+                
+                if (nextTileType == TileType.Pellet && !isChompSoundPlaying)
+                {
+                    chompAudio.PlayOneShot(chompSound);
+                    isChompSoundPlaying = true;
+                }
             }
+            else if (currentNextTileType == TileType.Pellet || currentNextTileType == TileType.None)
+            {
+                targetPosition = GetCenterOfGridCell(currentNextPosition);
+                isMoving = true;
+                
+                if (currentNextTileType == TileType.Pellet && !isChompSoundPlaying)
+                {
+                    chompAudio.PlayOneShot(chompSound);
+                    isChompSoundPlaying = true;
+                }
+            }
+        }
+        
+        if (isMoving && !isMovingSoundPlaying)
+        {
+            movingAudio.PlayOneShot(movingSound);
+            isMovingSoundPlaying = true;
         }
 
         float step = moveSpeed * Time.deltaTime;
@@ -60,6 +94,8 @@ public class PacStudentController : MonoBehaviour
         if (transform.position == targetPosition)
         {
             isMoving = false;
+            isChompSoundPlaying = false;
+            isMovingSoundPlaying = false;
         }
     }
 
@@ -89,22 +125,24 @@ public class PacStudentController : MonoBehaviour
 
     }
     
-    private bool IsWalkable(Vector3 position)
+    private TileType IsWalkable(Vector3 position)
     {
-        int gridX = Mathf.FloorToInt(position.x);
-        int gridY = Mathf.FloorToInt(position.y);
-
-        Vector3Int cellPosition = new Vector3Int(gridX, gridY, 0);
-
-        foreach (Tilemap tilemap in wallTilemap)
+        foreach (Tilemap tilemap in wallTilemaps)
         {
+            Vector3Int cellPosition = tilemap.WorldToCell(position);
             TileBase tile = tilemap.GetTile(cellPosition);
+            
+            if (tile is AnimatedTile)
+            {
+                return TileType.Pellet;
+            }
 
             foreach (TileBase wallTile in wallTiles)
             {
                 if (tile == wallTile)
                 {
-                    return false;
+                    print("At a wall");
+                    return TileType.Wall;
                 }
             }
 
@@ -112,14 +150,16 @@ public class PacStudentController : MonoBehaviour
             {
                 if (tile == safeTile)
                 {
-                    return true;
+                    print("It's a pellet");
+                    return TileType.Pellet;
                 }
             }
         }
+        
+        print("It's a none");
 
-        return true;
+        return TileType.None;
     }
-
     
     private Vector3 GetCenterOfGridCell(Vector3 position)
     {
