@@ -543,12 +543,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198594836}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.338032, y: 10.6936865, z: 0.900908}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2125885340}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &198594842
 AudioSource:
@@ -659,9 +659,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  wallTilemap: {fileID: 1943417427}
-  wallTile: {fileID: 11400000, guid: c88856d3c416005408fff471928ccd7b, type: 2}
-  pelletTile: {fileID: 11400000, guid: 63c63bb2fb230364a82e20d22f8af843, type: 2}
+  wallTilemap:
+  - {fileID: 631041277}
+  wallTiles:
+  - {fileID: 11400000, guid: c6fd748b9044ffc41bb83b312beb7569, type: 2}
+  - {fileID: 11400000, guid: 0e3365cff0179af46a11006125de5557, type: 2}
+  - {fileID: 11400000, guid: cfd4747b66d6e1344b07f53a3b834c0d, type: 2}
+  - {fileID: 11400000, guid: 9033e3f836698fe47b220564aae440ba, type: 2}
+  - {fileID: 11400000, guid: c88856d3c416005408fff471928ccd7b, type: 2}
+  safeTiles:
+  - {fileID: 11400000, guid: 9c909cb1f5e31274bb9b6728e942b393, type: 2}
+  - {fileID: 11400000, guid: 63c63bb2fb230364a82e20d22f8af843, type: 2}
   gridCellSize: {x: 1, y: 1, z: 0}
 --- !u!70 &198594844
 CapsuleCollider2D:
@@ -3502,6 +3510,7 @@ GameObject:
   - component: {fileID: 631041275}
   - component: {fileID: 631041277}
   - component: {fileID: 631041276}
+  - component: {fileID: 631041278}
   m_Layer: 0
   m_Name: Bottom left
   m_TagString: Untagged
@@ -5388,6 +5397,42 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &631041278
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631041274}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0
+  m_UseDelaunayMesh: 0
 --- !u!1 &689435909
 GameObject:
   m_ObjectHideFlags: 0
@@ -9541,7 +9586,6 @@ GameObject:
   - component: {fileID: 1943417425}
   - component: {fileID: 1943417427}
   - component: {fileID: 1943417426}
-  - component: {fileID: 1943417428}
   m_Layer: 0
   m_Name: Top left
   m_TagString: Untagged
@@ -11438,42 +11482,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!19719996 &1943417428
-TilemapCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943417424}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
-  m_ExtrusionFactor: 0
-  m_UseDelaunayMesh: 0
 --- !u!1 &2077892278
 GameObject:
   m_ObjectHideFlags: 0
@@ -11717,7 +11725,6 @@ Transform:
   - {fileID: 209983135}
   - {fileID: 988282453}
   - {fileID: 1520036460}
-  - {fileID: 198594839}
   - {fileID: 689435911}
   m_Father: {fileID: 179299710}
   m_RootOrder: -1

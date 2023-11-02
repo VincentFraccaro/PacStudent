@@ -11,9 +11,9 @@ public class PacStudentController : MonoBehaviour
     private Vector3 currentInput;  
     private Vector3 lastInput;     
     private bool isMoving = false;
-    [SerializeField] private Tilemap wallTilemap;
-    [SerializeField] private TileBase wallTile;
-    [SerializeField] private TileBase pelletTile;
+    [SerializeField] private Tilemap[] wallTilemap;
+    [SerializeField] private TileBase[] wallTiles;
+    [SerializeField] private TileBase[] safeTiles;
 
     
     public Vector3 gridCellSize = new Vector3(1.0f, 1.0f, 0.0f);
@@ -33,10 +33,23 @@ public class PacStudentController : MonoBehaviour
         if (!isMoving)
         {
             Vector3 nextPosition = transform.position + lastInput;
+            Vector3 currentNextPosition = transform.position + currentInput;
 
-            if (IsWalkable(nextPosition))
+            bool canMoveLastInput = IsWalkable(nextPosition);
+            bool canMoveCurrentInput = IsWalkable(currentNextPosition);
+
+            if (canMoveLastInput || canMoveCurrentInput)
             {
-                targetPosition = GetCenterOfGridCell(nextPosition);
+                if (canMoveLastInput)
+                {
+                    currentInput = lastInput;
+                    targetPosition = GetCenterOfGridCell(nextPosition);
+                }
+                else
+                {
+                    targetPosition = GetCenterOfGridCell(currentNextPosition);
+                }
+
                 isMoving = true;
             }
         }
@@ -83,23 +96,30 @@ public class PacStudentController : MonoBehaviour
 
         Vector3Int cellPosition = new Vector3Int(gridX, gridY, 0);
 
-        TileBase tile = wallTilemap.GetTile(cellPosition);
-
-        if (tile != null)
+        foreach (Tilemap tilemap in wallTilemap)
         {
-            if (tile == wallTile) 
+            TileBase tile = tilemap.GetTile(cellPosition);
+
+            foreach (TileBase wallTile in wallTiles)
             {
-                return false;
+                if (tile == wallTile)
+                {
+                    return false;
+                }
             }
 
-            if (tile == pelletTile)
+            foreach (TileBase safeTile in safeTiles)
             {
-                return true; 
+                if (tile == safeTile)
+                {
+                    return true;
+                }
             }
         }
 
         return true;
     }
+
     
     private Vector3 GetCenterOfGridCell(Vector3 position)
     {
