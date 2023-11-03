@@ -13,11 +13,14 @@ public class PacStudentController : MonoBehaviour
     }
     
     public float moveSpeed = 5.0f;
-    
+
+    private ParticleSystem dustParticleSystem;
+    private Animator anim;
     private Vector3 targetPosition;
     private Vector3 currentInput;  
     private Vector3 lastInput;     
     private bool isMoving = false;
+    private bool isEmittingDust = false;
     
     [SerializeField] private Tilemap[] wallTilemaps;
     [SerializeField] private TileBase[] wallTiles;
@@ -39,6 +42,12 @@ public class PacStudentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
+        dustParticleSystem = GetComponentInChildren<ParticleSystem>();
+        if (dustParticleSystem != null)
+        {
+            dustParticleSystem.Stop();
+        }
         chompAudio = GetComponent<AudioSource>();
         movingAudio = GetComponent<AudioSource>();
         targetPosition = transform.position;
@@ -51,6 +60,7 @@ public class PacStudentController : MonoBehaviour
         
         if (!isMoving)
         {
+            StopEmittingDustParticles();
             Vector3 nextPosition = transform.position + lastInput;
             Vector3 currentNextPosition = transform.position + currentInput;
 
@@ -81,6 +91,11 @@ public class PacStudentController : MonoBehaviour
                 }
             }
         }
+        else if(isMoving)
+        {
+            EmitDustParticles();
+        }
+        
         
         if (isMoving && !isMovingSoundPlaying)
         {
@@ -105,22 +120,22 @@ public class PacStudentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             lastInput = new Vector3(1, 0, 0); // Right
-            print("Pressed D");
+            anim.SetInteger("Direction", 0);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             lastInput = new Vector3(-1, 0, 0); // Left
-            print("Pressed A");
+            anim.SetInteger("Direction", 2);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
             lastInput = new Vector3(0, 1, 0); // Up
-            print("Pressed W");
+            anim.SetInteger("Direction", 1);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             lastInput = new Vector3(0, -1, 0); // Down
-            print("Pressed S");
+            anim.SetInteger("Direction", 3);
         }
 
     }
@@ -167,6 +182,25 @@ public class PacStudentController : MonoBehaviour
         int gridY = Mathf.FloorToInt(position.y);
         Vector3 center = new Vector3(gridX + 0.5f, gridY + 0.5f, position.z);
         return center;
+    }
+    
+    private void EmitDustParticles()
+    {
+        if (!isEmittingDust)
+        {
+            dustParticleSystem.Play();
+            isEmittingDust = true;
+        }
+    }
+
+    // Stop emitting dust particles if currently emitting.
+    private void StopEmittingDustParticles()
+    {
+        if (isEmittingDust)
+        {
+            dustParticleSystem.Stop();
+            isEmittingDust = false;
+        }
     }
 
 }
